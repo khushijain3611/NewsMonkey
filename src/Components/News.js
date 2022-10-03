@@ -32,8 +32,8 @@ export class News extends Component {
   }
   async updateNews() {
     this.props.setProgress(10);
-    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=2ac5de279a6c47bda7111b0287650783&page=${this.state.page}&pageSize=${this.props.pageSize}`;
-    
+    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+
     this.setState({ loading: true });
     let data = await fetch(url);
     this.props.setProgress(40);
@@ -59,40 +59,40 @@ export class News extends Component {
     this.setState({ page: this.state.page + 1 });
     this.updateNews()
   }
-  fetchMoreData = async () => {  
-    this.setState({page: this.state.page + 1})
-    const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=2ac5de279a6c47bda7111b0287650783&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`;
+  fetchMoreData = async () => {
+    this.setState({ page: this.state.page + 1 })
+    const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`;
     let data = await fetch(url);
     let parsedData = await data.json()
     this.setState({
-        articles: this.state.articles.concat(parsedData.articles),
-        totalResults: parsedData.totalResults
+      articles: this.state.articles.concat(parsedData.articles),
+      totalResults: parsedData.totalResults
     })
   };
   render() {
 
     return (
       <>
-       <h1 className="text-center" style={{ margin: '35px 0px' }}>NewsMonkey - Top {this.capitalizeFirstLetter(this.props.category)} Headlines</h1>
-                {this.state.loading && <Spinner />}
-                <InfiniteScroll
-                    dataLength={this.state.articles.length}
-                    next={this.fetchMoreData}
-                    hasMore={this.state.articles.length !== this.state.totalResults}
-                    loader={<Spinner/>}
-                > 
-                    <div className="container">
+        <h1 className="text-center" style={{ margin: '35px 0px' }}>NewsMonkey - Top {this.capitalizeFirstLetter(this.props.category)} Headlines</h1>
+        {this.state.loading && <Spinner />}
+        <InfiniteScroll
+          dataLength={this.state.articles.length}
+          next={this.fetchMoreData}
+          hasMore={this.state.articles.length !== this.state.totalResults}
+          loader={<Spinner />}
+        >
+          <div className="container">
 
-                    <div className="row">
-                        {this.state.articles.map((element) => {
-                            return <div className="col-md-4" key={element.url}>
-                                <NewsItem title={element.title ? element.title : ""} description={element.description ? element.description : ""} imageUrl={element.urlToImage} newsUrl={element.url} author={element.author} date={element.publishedAt} source={element.source.name} />
-                            </div>
-                        })}
-                    </div>
-                    </div> 
-                </InfiniteScroll>
-  </>
+            <div className="row">
+              {this.state.articles.map((element) => {
+                return <div className="col-md-4" key={element.url}>
+                  <NewsItem title={element.title ? element.title : ""} description={element.description ? element.description : ""} imageUrl={element.urlToImage} newsUrl={element.url} author={element.author} date={element.publishedAt} source={element.source.name} />
+                </div>
+              })}
+            </div>
+          </div>
+        </InfiniteScroll>
+      </>
     )
   }
 }
