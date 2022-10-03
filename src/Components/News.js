@@ -31,16 +31,20 @@ export class News extends Component {
     document.title = `NewsMonkey - ${this.capitalizeFirstLetter(this.props.category)}`;
   }
   async updateNews() {
+    this.props.setProgress(10);
     let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=2ac5de279a6c47bda7111b0287650783&page=${this.state.page}&pageSize=${this.props.pageSize}`;
     
     this.setState({ loading: true });
     let data = await fetch(url);
+    this.props.setProgress(40);
     let parsedData = await data.json();
+    this.props.setProgress(70);
     this.setState({
       articles: parsedData.articles,
       totalResults: parsedData.totalResults,
       loading: false
     })
+    this.props.setProgress(100);
   }
   async componentDidMount() {
     this.updateNews();
