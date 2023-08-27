@@ -1,0 +1,5 @@
+.custom-image {
+    object-fit: cover; /* Scale the image while maintaining its aspect ratio */
+    width: 100%; /* Make sure the image takes up the entire width of the container */
+    height: 200px; /* Set a fixed height for consistent image sizes */
+}

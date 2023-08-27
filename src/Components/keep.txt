@@ -32,8 +32,7 @@ const News = (props) => {
   }
   useEffect(() => {
     document.title = `NewsMonkey - ${capitalizeFirstLetter(props.category)}`;
-    updateNews();  
-    // eslint-disable-next-line 
+    updateNews();   
   }, [])
  
   const fetchMoreData = async () => {
@@ -51,7 +50,7 @@ const News = (props) => {
       <>
         <h1 className="text-center" style={{ margin: '35px 0px' , marginTop:'90px'}}>NewsMonkey - Top {capitalizeFirstLetter(props.category)} Headlines</h1>
         {loading && <Spinner />}
-        <InfiniteScroll
+        {articles && articles.length > 0 && <InfiniteScroll
           dataLength={articles.length}
           next={fetchMoreData}
           hasMore={articles.length !== totalResults}
@@ -62,12 +61,21 @@ const News = (props) => {
             <div className="row">
               {articles.map((element) => {
                 return <div className="col-md-4" key={element.url}>
-                  <NewsItem title={element.title ? element.title : ""} description={element.description ? element.description : ""} imageUrl={element.urlToImage} newsUrl={element.url} author={element.author} date={element.publishedAt} source={element.source.name} />
+                  {/* <NewsItem title={element.title ? element.title : ""} description={element.description ? element.description : ""} imageUrl={element.urlToImage} newsUrl={element.url} author={element.author} date={element.publishedAt} source={element.source.name} /> */}
+                  <NewsItem
+                      title={element.title || ""}
+                      description={element.description || ""}
+                      imageUrl={element.urlToImage}
+                      newsUrl={element.url}
+                      author={element.author || ""}
+                      date={element.publishedAt}
+                      source={element.source && element.source.name ? element.source.name : ""}
+                    />
                 </div>
               })}
             </div>
           </div>
-        </InfiniteScroll>
+        </InfiniteScroll>}
       </>
     )
   }
